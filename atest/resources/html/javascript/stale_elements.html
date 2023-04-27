@@ -1,0 +1,36 @@
+<html>
+<head><title> Stale elements</title></head>
+<body>
+    <div id="grandparent">
+        <div id="parent">
+            <p>This is the parent</p>
+            <div id="child">
+                <p>This is the child</p>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="detach-parent" onclick="grandparent.removeChild(parent)">
+        Detach parent
+    </button>
+    <button type="button" id="attach-parent" onclick="grandparent.appendChild(parent)">
+        Attach parent
+    </button>
+    <button type="button" id="detach-child" onclick="parent.removeChild(child)">
+        Detach child
+    </button>
+    <button type="button" id="attach-child" onclick="parent.appendChild(child)">
+        Attach child
+    </button>
+
+    <script>
+        var top = document.getElementById("top")
+        var parent = document.getElementById("parent")
+        var child = document.getElementById("child")
+        //function detach_by_id(id) {
+        //    node = document.getElementById(id)
+        //    return node.parentElement.removeChild(node)
+        //}
+    </script>
+
+</body>

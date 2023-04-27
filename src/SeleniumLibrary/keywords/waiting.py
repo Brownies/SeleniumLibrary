@@ -20,6 +20,7 @@ from typing import Optional, Union
 
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support import expected_conditions as ec
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
@@ -27,6 +28,34 @@ from SeleniumLibrary.utils import secs_to_timestr
 
 
 class WaitingKeywords(LibraryComponent):
+# staleness_of: WebElement
+# visibility_of: WebElement
+# element_to_be_clickable: locator / WebElement
+# element_to_be_selected: WebElement
+
+    @keyword
+    def wait_until_element_state_is(
+            self,
+            state: str,
+            locator: Union[WebElement, str],
+            timeout: Optional[timedelta] = None,
+            error: Optional[str] = None,
+        ):
+            STATES = {
+                'STALE':ec.staleness_of,
+                'VISIBLE':self.is_visible,
+                'CLICKABLE': ec.element_to_be_clickable,
+                'SELECTED': ec.element_to_be_selected,
+                'ENABLED': self.is_element_enabled,
+            }
+            element = self.find_element(locator, required=True)
+            self._wait_until(
+                lambda: STATES[state.upper()](element),
+                f"Element '{locator}' was not {state} in <TIMEOUT>.",
+                timeout,
+                error,
+            )
+
     @keyword
     def wait_for_condition(
         self,
